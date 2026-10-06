@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+  
+  body {
+    background-color: #050a1a;
+    color: #e2e8f0;
+    overflow-x: hidden;
+  }
+
+  /* Custom high-contrast accessible scrollbar */
+  ::-webkit-scrollbar {
+    width: 9px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #070f26;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e3575;
+    border-radius: 9999px;
+    border: 2px solid #070f26;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #38bdf8;
+  }
+
+  /* Accessible focus visible outlines */
+  :focus-visible {
+    outline: 2px solid #38bdf8;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-electric-blue via-electric-cyan to-accent-purple;
+  }
+
+  .text-gradient-purple {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-purple via-accent-violet to-electric-cyan;
+  }
+
+  .glass-card {
+    background: rgba(11, 21, 54, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(56, 189, 248, 0.12);
+  }
+
+  .glass-card-hover {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glass-card-hover:hover {
+    background: rgba(15, 29, 71, 0.85);
+    border-color: rgba(56, 189, 248, 0.35);
+    box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.2), 0 0 15px -3px rgba(168, 85, 247, 0.15);
+    transform: translateY(-3px);
+  }
+
+  .glass-nav {
+    background: rgba(5, 10, 26, 0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+  }
+
+  .tech-glow-blue {
+    box-shadow: 0 0 35px -5px rgba(56, 189, 248, 0.25);
+  }
+
+  .tech-glow-purple {
+    box-shadow: 0 0 35px -5px rgba(168, 85, 247, 0.22);
+  }
+
+  .bg-radial-glow {
+    background: radial-gradient(circle at 50% 20%, rgba(56, 189, 248, 0.1) 0%, rgba(168, 85, 247, 0.05) 45%, transparent 70%);
+  }
+}
