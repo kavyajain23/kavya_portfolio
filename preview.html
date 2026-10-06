@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kavya Jain | B.Tech Student | Aspiring AI & Web Developer</title>
+  <meta name="description" content="Portfolio of Kavya Jain, B.Tech CSE Core student at JECRC University, Jaipur. Aspiring AI & Web Developer." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23070f26'/><path d='M28 30 L46 50 L28 70' stroke='%2338bdf8' stroke-width='9' stroke-linecap='round' stroke-linejoin='round' fill='none'/><path d='M54 70 L76 70' stroke='%23a855f7' stroke-width='9' stroke-linecap='round'/></svg>" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              950: '#040814',
+              900: '#070f26',
+              850: '#0b1536',
+              800: '#0f1d47',
+              700: '#162759',
+              600: '#1e3575',
+            },
+            electric: {
+              blue: '#00d4ff',
+              cyan: '#38bdf8',
+              sky: '#60a5fa',
+            },
+            accent: {
+              purple: '#a855f7',
+              violet: '#8b5cf6',
+              indigo: '#6366f1',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- React & Babel CDNs -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    body {
+      background-color: #050a1a;
+      color: #e2e8f0;
+      overflow-x: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, #00d4ff 0%, #38bdf8 50%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .glass-card {
+      background: rgba(11, 21, 54, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(56, 189, 248, 0.12);
+    }
+    .glass-card-hover {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card-hover:hover {
+      background: rgba(15, 29, 71, 0.85);
+      border-color: rgba(56, 189, 248, 0.35);
+      box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.2), 0 0 15px -3px rgba(168, 85, 247, 0.15);
+      transform: translateY(-3px);
+    }
+    .glass-nav {
+      background: rgba(5, 10, 26, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+    }
+    .bg-grid-pattern {
+      background-image: linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px), 
+                        linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .bg-radial-glow {
+      background: radial-gradient(circle at 50% 20%, rgba(56, 189, 248, 0.12) 0%, rgba(168, 85, 247, 0.06) 45%, transparent 70%);
+    }
+    ::-webkit-scrollbar {
+      width: 9px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #070f26;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e3575;
+      border-radius: 9999px;
+      border: 2px solid #070f26;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+    :focus-visible {
+      outline: 2px solid #38bdf8;
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-navy-950 text-slate-100 antialiased selection:bg-electric-blue/30 selection:text-white">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // --- Embedded SVGs for complete self-reliance ---
+    const Icons = {
+      Github: () => (
+        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      ),
+      Linkedin: () => (
+        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+      ),
+      Mail: () => (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      ),
+      Sparkles: () => (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.286L13 21l-2.286-6.857L5 12l5.714-2.286L13 3z"/></svg>
+      ),
+      Cpu: () => (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" strokeWidth="2"/><rect x="9" y="9" width="6" height="6" strokeWidth="2"/><path strokeWidth="2" d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>
+      ),
+      Terminal: () => (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 17l6-6-6-6M12 19h8"/></svg>
+      ),
+      GraduationCap: () => (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+      ),
+      ArrowRight: () => (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      ),
+      ArrowUp: () => (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+      ),
+      Copy: () => (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+      ),
+      Check: () => (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>
+      ),
+      Menu: () => (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      ),
+      X: () => (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      ),
+      Eye: () => (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+      ),
+      Award: () => (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7" strokeWidth="2"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/></svg>
+      )
+    };
+
+    // --- Personal Information Data ---
+    const data = {
+      name: "Kavya Jain",
+      headline: "B.Tech Student | Aspiring AI & Web Developer",
+      college: "JECRC University",
+      degree: "B.Tech in CSE Core",
+      duration: "2026 – 2030",
+      location: "Jaipur, India",
+      email: "kavyaaaaaaa23@gmail.com",
+      githubUrl: "https://github.com/kavyajain23",
+      linkedinUrl: "https://www.linkedin.com/in/kavya-jain-a93194421?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+      intro: "I build, learn, and explore technology to turn ideas into useful digital experiences.",
+      about: "I am a B.Tech student with a growing interest in artificial intelligence, frontend development, and digital productivity. I enjoy learning by building practical projects, exploring new tools, and improving my problem-solving skills. I am currently learning AUTOCAD, DIGITAL DATA & AI LITERACY, and COMMUNICATION SKILLS.",
+      currentlyLearning: [
+        { name: "AutoCAD", category: "Design & Drafting" },
+        { name: "Digital Data & AI Literacy", category: "Artificial Intelligence" },
+        { name: "Communication Skills", category: "Professional Development" }
+      ],
+      education: {
+        degree: "B.Tech in CSE Core",
+        college: "JECRC University",
+        duration: "2026 – 2030",
+        areas: [
+          { name: "Programming", desc: "Core algorithms, data logic, and foundational coding in Python and C." },
+          { name: "Web Development", desc: "Crafting semantic, accessible web user interfaces with HTML, CSS, JavaScript, and React." },
+          { name: "AI Fundamentals", desc: "Grasping machine learning principles, prompt engineering, and generative AI literacy." },
+          { name: "Databases", desc: "Structured data storage principles, querying basics, and information schemas." },
+          { name: "Problem Solving", desc: "Structured analytical debugging, logic reasoning, and algorithmic thinking." }
+        ]
+      },
+      skills: [
+        {
+          category: "Frontend",
+          items: [
+            { name: "HTML", status: "Proficient", isLearning: false },
+            { name: "CSS", status: "Proficient", isLearning: false },
+            { name: "JavaScript", status: "Intermediate", isLearning: false },
+            { name: "React", status: "Learning", isLearning: true }
+          ]
+        },
+        {
+          category: "Programming",
+          items: [
+            { name: "Python", status: "Intermediate", isLearning: false },
+            { name: "C / C++ Basics", status: "Learning", isLearning: true },
+            { name: "Problem Solving", status: "Growing", isLearning: false },
+            { name: "Algorithm Foundations", status: "Learning", isLearning: true }
+          ]
+        },
+        {
+          category: "AI & Tools",
+          items: [
+            { name: "Artificial Intelligence", status: "Learning", isLearning: true },
+            { name: "Generative AI", status: "Learning", isLearning: true },
+            { name: "Git", status: "Intermediate", isLearning: false },
+            { name: "GitHub", status: "Intermediate", isLearning: false }
+          ]
+        },
+        {
+          category: "Productivity",
+          items: [
+            { name: "Digital Productivity Tools", status: "Proficient", isLearning: false },
+            { name: "Presentation Design", status: "Proficient", isLearning: false },
+            { name: "Documentation", status: "Intermediate", isLearning: false },
+            { name: "AutoCAD", status: "Learning", isLearning: true }
+          ]
+        }
+      ],
+      projects: [
+        {
+          id: 1,
+          title: "Personal Portfolio Website",
+          shortDescription: "A responsive portfolio that presents my profile, skills, and work. Built with modern dark-themed aesthetics and accessible UI.",
+          tags: ["React", "Tailwind CSS", "JavaScript", "Responsive Design"],
+          viewable: true,
+          githubUrl: "https://github.com/kavyajain23/portfolio"
+        },
+        {
+          id: 2,
+          title: "AI Study & Prompt Notes Studio",
+          shortDescription: "A student-friendly web application for organizing lecture prompts, generating structured study summaries, and exploring generative AI.",
+          tags: ["JavaScript", "HTML5", "CSS3", "GenAI Concepts"],
+          viewable: true,
+          githubUrl: "https://github.com/kavyajain23"
+        },
+        {
+          id: 3,
+          title: "Student Academic & Task Planner",
+          shortDescription: "An intuitive task management web app designed to keep track of semester assignments, lab deliverables, and daily study targets.",
+          tags: ["JavaScript", "CSS Grid", "DOM Manipulation", "Productivity"],
+          viewable: true,
+          githubUrl: "https://github.com/kavyajain23"
+        },
+        {
+          id: 4,
+          title: "Python Logic & Algorithmic Mini-Toolkit",
+          shortDescription: "A curated repository of foundational Python scripts solving mathematical series, array manipulations, and beginner computational puzzles.",
+          tags: ["Python", "Algorithms", "Problem Solving", "CLI"],
+          viewable: true,
+          githubUrl: "https://github.com/kavyajain23"
+        }
+      ],
+      achievements: {
+        courses: [
+          { title: "AUTOCAD", type: "Technical Drafting", note: "Enrolled & active coursework" },
+          { title: "DIGITAL DATA & AI LITERACY", type: "Applied Tech", note: "Foundational AI & data ethics module" },
+          { title: "COMMUNICATION SKILLS", type: "Professional Skills", note: "JECRC University curriculum" },
+          { title: "CSE Core Foundations (Semester I)", type: "Core Degree", note: "Programming & algorithmic logic" }
+        ],
+        certifications: [
+          { title: "Digital Data & AI Literacy", status: "In Progress", date: "2026" },
+          { title: "Foundational Web Development", status: "In Progress", date: "2026" },
+          { title: "Advanced Specialization", status: "Coming soon", date: "Upcoming" }
+        ],
+        activities: [
+          { title: "Campus Tech & Coding Circles", desc: "Active member at JECRC University participating in student workshops and peer learning." },
+          { title: "Open Source & Developer Exploration", desc: "Building public projects on GitHub and exploring modern web standards." }
+        ]
+      }
+    };
+
+    function App() {
+      const [navOpen, setNavOpen] = useState(false);
+      const [copiedEmail, setCopiedEmail] = useState(false);
+      const [activeHeroTab, setActiveHeroTab] = useState('code');
+      const [selectedProject, setSelectedProject] = useState(null);
+      const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+      const [formSubmitted, setFormSubmitted] = useState(false);
+
+      const copyEmail = () => {
+        navigator.clipboard.writeText(data.email);
+        setCopiedEmail(true);
+        setTimeout(() => setCopiedEmail(false), 2000);
+      };
+
+      const handleFormSubmit = (e) => {
+        e.preventDefault();
+        if (!formData.name || !formData.email || !formData.message) return;
+        setFormSubmitted(true);
+      };
+
+      return (
+        <div className="min-h-screen bg-navy-950 text-slate-100 flex flex-col font-sans">
+          
+          {/* Navigation Bar */}
+          <header className="fixed top-0 left-0 right-0 z-50 glass-nav py-4">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+              <a href="#home" className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-electric-blue/20 to-accent-purple/30 border border-electric-blue/40 flex items-center justify-center font-mono font-bold text-white text-sm">
+                  KJ
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-bold text-white text-base leading-none">Kavya Jain</span>
+                  <span className="text-[11px] font-mono text-slate-400 mt-1">CSE Core '30</span>
+                </div>
+              </a>
+
+              {/* Desktop Nav */}
+              <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+                <a href="#home" className="text-slate-300 hover:text-white transition-colors">Home</a>
+                <a href="#about" className="text-slate-300 hover:text-white transition-colors">About</a>
+                <a href="#education" className="text-slate-300 hover:text-white transition-colors">Education</a>
+                <a href="#skills" className="text-slate-300 hover:text-white transition-colors">Skills</a>
+                <a href="#projects" className="text-slate-300 hover:text-white transition-colors">Projects</a>
+                <a href="#achievements" className="text-slate-300 hover:text-white transition-colors">Achievements</a>
+                <a href="#contact" className="text-slate-300 hover:text-white transition-colors">Contact</a>
+              </nav>
+
+              <div className="hidden lg:flex items-center gap-3">
+                <a 
+                  href={data.githubUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="p-2 rounded-lg text-slate-400 hover:text-electric-blue hover:bg-white/5 transition-all"
+                  aria-label="GitHub"
+                >
+                  <Icons.Github />
+                </a>
+                <a 
+                  href={data.linkedinUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="p-2 rounded-lg text-slate-400 hover:text-accent-purple hover:bg-white/5 transition-all"
+                  aria-label="LinkedIn"
+                >
+                  <Icons.Linkedin />
+                </a>
+                <a 
+                  href="#contact" 
+                  className="px-4 py-1.5 text-xs font-semibold rounded-lg bg-gradient-to-r from-electric-blue/20 to-accent-purple/20 border border-electric-blue/40 hover:border-electric-blue text-white transition-all shadow-sm"
+                >
+                  Get in Touch
+                </a>
+              </div>
+
+              {/* Mobile Menu Toggle */}
+              <button 
+                onClick={() => setNavOpen(!navOpen)}
+                className="md:hidden p-2 text-slate-300 hover:text-white"
+                aria-label="Toggle menu"
+              >
+                {navOpen ? <Icons.X /> : <Icons.Menu />}
+              </button>
+            </div>
+
+            {/* Mobile Menu Dropdown */}
+            {navOpen && (
+              <div className="md:hidden glass-nav border-b border-electric-blue/20 px-4 pt-3 pb-6 mt-3 space-y-2">
+                <a href="#home" onClick={() => setNavOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5">Home</a>
+                <a href="#about" onClick={() => setNavOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5">About</a>
+                <a href="#education" onClick={() => setNavOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5">Education</a>
+                <a href="#skills" onClick={() => setNavOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5">Skills</a>
+                <a href="#projects" onClick={() => setNavOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5">Projects</a>
+                <a href="#achievements" onClick={() => setNavOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5">Achievements</a>
+                <a href="#contact" onClick={() => setNavOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5">Contact</a>
+              </div>
+            )}
+          </header>
+
+          {/* Hero Section */}
+          <section id="home" className="relative min-h-screen pt-32 pb-20 flex items-center bg-radial-glow overflow-hidden">
+            <div className="absolute inset-0 bg-grid-pattern opacity-60 pointer-events-none"></div>
+            
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div className="lg:col-span-7 space-y-6 text-left">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-navy-900/90 border border-electric-blue/30 text-xs font-mono text-slate-300 shadow-sm">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span className="text-electric-blue font-semibold">First Year Undergrad</span>
+                    <span className="text-slate-500">•</span>
+                    <span>JECRC University '30</span>
+                  </div>
+
+                  <div className="space-y-2">
+                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight">
+                      Hi, I'm <br />
+                      <span className="text-gradient">Kavya Jain</span>
+                    </h1>
+                    <p className="text-xl sm:text-2xl font-semibold text-slate-200">
+                      {data.headline}
+                    </p>
+                  </div>
+
+                  <p className="text-base sm:text-lg text-slate-300 max-w-2xl font-normal leading-relaxed">
+                    "{data.intro}"
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
+                    <span className="px-3 py-1 rounded-md bg-white/5 border border-white/10 flex items-center gap-1.5">
+                      <Icons.GraduationCap />
+                      <span>B.Tech in CSE Core</span>
+                    </span>
+                    <span className="px-3 py-1 rounded-md bg-white/5 border border-white/10">
+                      📍 Jaipur, India
+                    </span>
+                    <span className="px-3 py-1 rounded-md bg-white/5 border border-white/10">
+                      🎯 Graduation 2030
+                    </span>
+                  </div>
+
+                  <div className="pt-4 flex flex-wrap items-center gap-4">
+                    <a
+                      href="#projects"
+                      className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-electric-blue to-accent-purple text-navy-950 font-bold text-sm sm:text-base flex items-center gap-2 shadow-lg shadow-electric-blue/20 hover:scale-[1.02] transition-all"
+                    >
+                      <span>Explore Projects</span>
+                      <Icons.ArrowRight />
+                    </a>
+                    <a
+                      href="#contact"
+                      className="px-6 py-3.5 rounded-xl glass-card hover:bg-white/10 border border-slate-700 text-white font-semibold text-sm sm:text-base flex items-center gap-2 transition-all"
+                    >
+                      <span>Get in Touch</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Subtle AI/Code Visual Element */}
+                <div className="lg:col-span-5">
+                  <div className="rounded-2xl bg-navy-900/90 border border-electric-blue/25 shadow-2xl overflow-hidden backdrop-blur-xl">
+                    <div className="flex items-center justify-between px-4 py-3 bg-navy-950/80 border-b border-white/10">
+                      <div className="flex items-center gap-2">
+                        <span className="w-3 h-3 rounded-full bg-rose-500/80"></span>
+                        <span className="w-3 h-3 rounded-full bg-amber-500/80"></span>
+                        <span className="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                        <span className="ml-2 font-mono text-xs text-slate-400 flex items-center gap-1.5">
+                          <Icons.Terminal />
+                          kavya_profile.py
+                        </span>
+                      </div>
+                      <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">Active</span>
+                    </div>
+
+                    <div className="p-5 font-mono text-xs sm:text-[13px] leading-relaxed bg-navy-950/60 min-h-[260px] text-slate-300">
+                      <div className="text-slate-500 italic"># Kavya Jain - Engineering Setup</div>
+                      <div><span className="text-accent-purple">const</span> <span className="text-electric-blue">student</span> = &#123;</div>
+                      <div className="pl-4"><span className="text-slate-400">name:</span> <span className="text-emerald-300">"Kavya Jain"</span>,</div>
+                      <div className="pl-4"><span className="text-slate-400">degree:</span> <span className="text-emerald-300">"B.Tech CSE Core"</span>,</div>
+                      <div className="pl-4"><span className="text-slate-400">college:</span> <span className="text-emerald-300">"JECRC University"</span>,</div>
+                      <div className="pl-4"><span className="text-slate-400">duration:</span> <span className="text-amber-300">"2026 – 2030"</span>,</div>
+                      <div className="pl-4"><span className="text-slate-400">interests:</span> [<span className="text-sky-300">"AI"</span>, <span className="text-sky-300">"Frontend"</span>, <span className="text-sky-300">"Productivity"</span>],</div>
+                      <div className="pl-4"><span className="text-slate-400">learning:</span> [<span className="text-pink-300">"AutoCAD"</span>, <span className="text-pink-300">"AI Literacy"</span>, <span className="text-pink-300">"Communication"</span>]</div>
+                      <div>&#125;;</div>
+                      <div className="pt-2">
+                        <span className="text-electric-blue">console</span>.<span className="text-yellow-300">log</span>(<span className="text-emerald-300">"Building digital experiences 🚀"</span>);
+                      </div>
+                    </div>
+
+                    <div className="px-4 py-2 bg-navy-950/90 border-t border-white/5 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                      <span>Jaipur, India</span>
+                      <span className="text-electric-blue">JECRC CSE '30</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* About Section */}
+          <section id="about" className="py-20 lg:py-28 bg-navy-950/60 border-t border-white/5">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span className="text-electric-blue text-xs font-mono font-medium uppercase tracking-wider bg-electric-blue/10 px-3 py-1 rounded-full border border-electric-blue/20">
+                  Profile & Background
+                </span>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
+                  About <span className="text-gradient">Me</span>
+                </h2>
+                <p className="text-slate-400 text-sm sm:text-base">
+                  First-year engineering student blending curiosity, practical programming, and creative web solutions.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div className="lg:col-span-7 glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+                  <div className="border-b border-white/10 pb-4">
+                    <h3 className="text-xl font-bold text-white">
+                      Hi, I'm <span className="text-electric-blue">Kavya</span>.
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-400 font-mono mt-0.5">
+                      B.Tech Student • JECRC University, Jaipur
+                    </p>
+                  </div>
+
+                  <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+                    {data.about}
+                  </p>
+
+                  <div className="pt-4 border-t border-white/10">
+                    <span className="text-xs font-mono font-semibold text-slate-300 uppercase tracking-wider block mb-3">
+                      Currently Learning:
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {data.currentlyLearning.map((item, idx) => (
+                        <div key={idx} className="p-3 rounded-xl bg-navy-900/80 border border-white/10">
+                          <span className="text-xs font-bold text-white uppercase block">{item.name}</span>
+                          <span className="text-[11px] text-slate-400 block mt-0.5">{item.category}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Two Highlight Cards as requested */}
+                <div className="lg:col-span-5 space-y-6">
+                  <div className="glass-card glass-card-hover rounded-2xl p-6 group">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-electric-blue/15 border border-electric-blue/30 flex items-center justify-center text-electric-blue shrink-0">
+                        <Icons.Sparkles />
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="text-lg font-bold text-white">Curious Learner</h4>
+                        <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                          Constantly experimenting with emerging tools, mastering foundational core computer science concepts, and discovering smarter ways to code and solve real problems.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="glass-card glass-card-hover rounded-2xl p-6 group">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-accent-purple/15 border border-accent-purple/30 flex items-center justify-center text-accent-purple shrink-0">
+                        <Icons.Cpu />
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="text-lg font-bold text-white">Technology Enthusiast</h4>
+                        <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                          Passionate about the intersection of intuitive web user interfaces and intelligent AI systems, with a drive to craft accessible and impactful digital solutions.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Education Section */}
+          <section id="education" className="py-20 lg:py-28 bg-navy-950/40">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span className="text-accent-purple text-xs font-mono font-medium uppercase tracking-wider bg-accent-purple/10 px-3 py-1 rounded-full border border-accent-purple/20">
+                  Academic Details
+                </span>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
+                  Education & <span className="text-gradient">Foundation</span>
+                </h2>
+                <p className="text-slate-400 text-sm sm:text-base">
+                  Rigorous academic grounding in computer science and engineering.
+                </p>
+              </div>
+
+              <div className="glass-card rounded-2xl p-6 sm:p-8 mb-12 border border-electric-blue/20">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
+                  <div>
+                    <span className="px-3 py-1 rounded-full bg-electric-blue/15 text-electric-blue text-xs font-mono font-semibold">
+                      Undergraduate
+                    </span>
+                    <h3 className="text-2xl sm:text-3xl font-bold text-white mt-2">
+                      {data.education.degree}
+                    </h3>
+                    <p className="text-base text-electric-blue font-medium mt-1">
+                      {data.education.college} • Jaipur, India
+                    </p>
+                  </div>
+                  <div className="text-left md:text-right font-mono text-xs text-slate-300">
+                    <span className="block text-slate-400">Duration</span>
+                    <span className="text-base font-bold text-white">{data.education.duration}</span>
+                  </div>
+                </div>
+
+                <div className="mt-8 space-y-4">
+                  <h4 className="text-sm font-mono uppercase text-slate-300 font-bold tracking-wider">
+                    Relevant Learning Areas
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {data.education.areas.map((area, idx) => (
+                      <div key={idx} className="p-4 rounded-xl bg-navy-900/80 border border-white/10">
+                        <span className="text-sm font-bold text-white block">{area.name}</span>
+                        <p className="text-xs text-slate-300 mt-1 leading-relaxed">{area.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Skills Section */}
+          <section id="skills" className="py-20 lg:py-28 bg-navy-950/80 border-t border-white/5">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span className="text-electric-blue text-xs font-mono font-medium uppercase tracking-wider bg-electric-blue/10 px-3 py-1 rounded-full border border-electric-blue/20">
+                  Technical Stack
+                </span>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
+                  Skills & <span className="text-gradient">Tools</span>
+                </h2>
+                <p className="text-slate-400 text-sm sm:text-base">
+                  Clearly categorized skills with unfamiliar skills transparently marked as <span className="text-amber-400 font-semibold font-mono">“Learning”</span>.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {data.skills.map((group, idx) => (
+                  <div key={idx} className="glass-card rounded-2xl p-6 sm:p-7 space-y-5 border border-white/10">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                      <h3 className="text-lg font-bold text-white">{group.category}</h3>
+                      <span className="text-xs font-mono text-slate-400">{group.items.length} skills</span>
+                    </div>
+
+                    <div className="space-y-3">
+                      {group.items.map((skill, sIdx) => (
+                        <div key={sIdx} className="p-3 rounded-xl bg-navy-900/80 border border-white/5 flex items-center justify-between">
+                          <span className="text-sm font-semibold text-white">{skill.name}</span>
+                          {skill.isLearning ? (
+                            <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-amber-400/15 text-amber-300 border border-amber-400/30 uppercase">
+                              Learning
+                            </span>
+                          ) : (
+                            <span className="px-2.5 py-0.5 rounded text-[11px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                              {skill.status}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Projects Section */}
+          <section id="projects" className="py-20 lg:py-28 bg-navy-950/60 border-t border-white/5">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span className="text-electric-blue text-xs font-mono font-medium uppercase tracking-wider bg-electric-blue/10 px-3 py-1 rounded-full border border-electric-blue/20">
+                  Applied Work
+                </span>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
+                  Featured <span className="text-gradient">Projects</span>
+                </h2>
+                <p className="text-slate-400 text-sm sm:text-base">
+                  Believable student-level projects built during first-year studies and personal exploration.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {data.projects.map((proj) => (
+                  <div key={proj.id} className="glass-card glass-card-hover rounded-2xl p-6 sm:p-7 flex flex-col justify-between border border-white/10 group">
+                    <div>
+                      <h3 className="text-xl font-bold text-white group-hover:text-electric-blue transition-colors">
+                        {proj.title}
+                      </h3>
+                      <p className="text-sm text-slate-300 mt-2 leading-relaxed">
+                        {proj.shortDescription}
+                      </p>
+                      <div className="mt-4 flex flex-wrap gap-1.5">
+                        {proj.tags.map((tag, tIdx) => (
+                          <span key={tIdx} className="px-2.5 py-1 rounded-md text-[11px] font-mono bg-navy-900 text-slate-300 border border-white/10">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between gap-3">
+                      <button
+                        onClick={() => setSelectedProject(proj)}
+                        className="px-4 py-2 rounded-xl bg-gradient-to-r from-electric-blue/20 to-accent-purple/20 hover:from-electric-blue/30 hover:to-accent-purple/30 text-white font-semibold text-xs border border-electric-blue/30 flex items-center gap-1.5"
+                      >
+                        <Icons.Eye />
+                        <span>View Project</span>
+                      </button>
+
+                      {proj.githubUrl && (
+                        <a
+                          href={proj.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-medium flex items-center gap-1.5"
+                        >
+                          <Icons.Github />
+                          <span>GitHub</span>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Project Modal Preview */}
+          {selectedProject && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md" onClick={() => setSelectedProject(null)}>
+              <div className="relative w-full max-w-xl bg-navy-900 border border-electric-blue/30 rounded-2xl p-6 sm:p-8 space-y-5" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <h3 className="text-xl font-bold text-white">{selectedProject.title}</h3>
+                  <button onClick={() => setSelectedProject(null)} className="p-1 text-slate-400 hover:text-white"><Icons.X /></button>
+                </div>
+                <p className="text-sm text-slate-300 leading-relaxed">{selectedProject.shortDescription}</p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.tags.map((t, idx) => (
+                    <span key={idx} className="px-2.5 py-1 rounded text-xs font-mono bg-white/5 text-electric-cyan border border-white/10">#{t}</span>
+                  ))}
+                </div>
+                <div className="p-4 rounded-xl bg-electric-blue/10 border border-electric-blue/20 text-xs text-slate-300">
+                  <strong className="text-white block mb-1">Student Engineering Overview:</strong>
+                  Built by Kavya Jain as an experiential learning application focusing on clean code, responsive design, and user-centric problem solving.
+                </div>
+                <div className="pt-3 flex justify-between items-center border-t border-white/10">
+                  <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-xl bg-white/10 text-xs font-semibold text-white flex items-center gap-1.5">
+                    <Icons.Github />
+                    <span>View Repository</span>
+                  </a>
+                  <button onClick={() => setSelectedProject(null)} className="px-4 py-2 rounded-xl bg-electric-blue text-navy-950 font-bold text-xs">
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Achievements Section */}
+          <section id="achievements" className="py-20 lg:py-28 bg-navy-950/40">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span className="text-accent-purple text-xs font-mono font-medium uppercase tracking-wider bg-accent-purple/10 px-3 py-1 rounded-full border border-accent-purple/20">
+                  Recognized Milestones
+                </span>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
+                  Academic <span className="text-gradient">Achievements</span>
+                </h2>
+                <p className="text-slate-400 text-sm sm:text-base">
+                  Real courses, verifiable certifications in progress, and campus activities.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Courses Card */}
+                <div className="glass-card rounded-2xl p-6 space-y-4">
+                  <h3 className="text-base font-bold text-white flex items-center gap-2 border-b border-white/10 pb-3">
+                    <Icons.Sparkles />
+                    <span>Real Courses</span>
+                  </h3>
+                  <div className="space-y-3">
+                    {data.achievements.courses.map((c, idx) => (
+                      <div key={idx} className="p-3 rounded-xl bg-navy-900/70 border border-white/5">
+                        <span className="text-xs font-bold text-white block">{c.title}</span>
+                        <span className="text-[11px] text-electric-cyan font-mono">{c.type}</span>
+                        <span className="text-[11px] text-slate-400 block mt-0.5">{c.note}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Certifications Card */}
+                <div className="glass-card rounded-2xl p-6 space-y-4">
+                  <h3 className="text-base font-bold text-white flex items-center gap-2 border-b border-white/10 pb-3">
+                    <Icons.Award />
+                    <span>Certifications</span>
+                  </h3>
+                  <div className="space-y-3">
+                    {data.achievements.certifications.map((c, idx) => (
+                      <div key={idx} className="p-3 rounded-xl bg-navy-900/70 border border-white/5 flex items-center justify-between">
+                        <div>
+                          <span className="text-xs font-bold text-white block">{c.title}</span>
+                          <span className="text-[11px] text-slate-400 font-mono">{c.date}</span>
+                        </div>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-400/15 text-amber-300 border border-amber-400/30">
+                          {c.status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Activities Card */}
+                <div className="glass-card rounded-2xl p-6 space-y-4">
+                  <h3 className="text-base font-bold text-white flex items-center gap-2 border-b border-white/10 pb-3">
+                    <Icons.GraduationCap />
+                    <span>Activities & Leadership</span>
+                  </h3>
+                  <div className="space-y-3">
+                    {data.achievements.activities.map((a, idx) => (
+                      <div key={idx} className="p-3 rounded-xl bg-navy-900/70 border border-white/5 space-y-1">
+                        <span className="text-xs font-bold text-white block">{a.title}</span>
+                        <p className="text-[11px] text-slate-300 leading-relaxed">{a.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Contact Section */}
+          <section id="contact" className="py-20 lg:py-28 bg-navy-950/80 border-t border-white/5">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span className="text-electric-blue text-xs font-mono font-medium uppercase tracking-wider bg-electric-blue/10 px-3 py-1 rounded-full border border-electric-blue/20">
+                  Connect With Me
+                </span>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
+                  Get in <span className="text-gradient">Touch</span>
+                </h2>
+                <p className="text-slate-400 text-sm sm:text-base">
+                  Open for internships, mentorship, student project collaborations, and discussions.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                <div className="lg:col-span-5 space-y-5">
+                  <div className="glass-card rounded-2xl p-6 border border-electric-blue/20 space-y-3">
+                    <h3 className="font-bold text-white text-lg">Let's Collaborate</h3>
+                    <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                      Always eager to learn and build alongside passionate developers and students. Feel free to reach out directly:
+                    </p>
+                  </div>
+
+                  <div className="glass-card rounded-xl p-4 flex items-center justify-between border border-white/10">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-lg bg-electric-blue/15 text-electric-blue flex items-center justify-center">
+                        <Icons.Mail />
+                      </div>
+                      <div>
+                        <span className="text-xs font-mono text-slate-400 block">Email</span>
+                        <a href={`mailto:${data.email}`} className="text-sm font-semibold text-white hover:text-electric-blue break-all">
+                          {data.email}
+                        </a>
+                      </div>
+                    </div>
+                    <button onClick={copyEmail} className="p-2 rounded-lg bg-white/5 text-xs text-slate-300 hover:text-white shrink-0 ml-2">
+                      {copiedEmail ? <Icons.Check /> : <Icons.Copy />}
+                    </button>
+                  </div>
+
+                  <a href={data.linkedinUrl} target="_blank" rel="noopener noreferrer" className="glass-card rounded-xl p-4 flex items-center gap-3 border border-white/10 hover:border-accent-purple/40">
+                    <div className="w-9 h-9 rounded-lg bg-accent-purple/15 text-accent-purple flex items-center justify-center">
+                      <Icons.Linkedin />
+                    </div>
+                    <div>
+                      <span className="text-xs font-mono text-slate-400 block">LinkedIn</span>
+                      <span className="text-sm font-semibold text-white">Kavya Jain</span>
+                    </div>
+                  </a>
+
+                  <a href={data.githubUrl} target="_blank" rel="noopener noreferrer" className="glass-card rounded-xl p-4 flex items-center gap-3 border border-white/10 hover:border-electric-blue/40">
+                    <div className="w-9 h-9 rounded-lg bg-white/10 text-white flex items-center justify-center">
+                      <Icons.Github />
+                    </div>
+                    <div>
+                      <span className="text-xs font-mono text-slate-400 block">GitHub</span>
+                      <span className="text-sm font-semibold text-white">@kavyajain23</span>
+                    </div>
+                  </a>
+                </div>
+
+                <div className="lg:col-span-7 glass-card rounded-2xl p-6 sm:p-8 border border-white/10">
+                  <div className="mb-4">
+                    <h3 className="text-lg font-bold text-white">Contact Form (Demonstration)</h3>
+                    <p className="text-xs text-slate-400 mt-1">
+                      This is a frontend demonstration interface. Messages will show immediate client-side confirmation.
+                    </p>
+                  </div>
+
+                  {formSubmitted ? (
+                    <div className="p-6 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-center space-y-3">
+                      <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                        <Icons.Check />
+                      </div>
+                      <h4 className="text-base font-bold text-white">Demo Message Received!</h4>
+                      <p className="text-xs text-slate-300">
+                        Thank you, {formData.name}. You can also email directly to <span className="text-electric-blue">{data.email}</span>.
+                      </p>
+                      <button onClick={() => setFormSubmitted(false)} className="px-4 py-2 rounded-lg bg-white/10 text-xs font-semibold text-white">
+                        Send another note
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleFormSubmit} className="space-y-4">
+                      <div>
+                        <label className="text-xs font-mono text-slate-300 block mb-1">Name</label>
+                        <input
+                          type="text"
+                          required
+                          value={formData.name}
+                          onChange={(e) => setFormData({...formData, name: e.target.value})}
+                          placeholder="Your Name"
+                          className="w-full px-4 py-2.5 rounded-xl bg-navy-900 border border-white/10 text-white placeholder-slate-500 text-sm focus:border-electric-blue"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs font-mono text-slate-300 block mb-1">Email</label>
+                        <input
+                          type="email"
+                          required
+                          value={formData.email}
+                          onChange={(e) => setFormData({...formData, email: e.target.value})}
+                          placeholder="your.email@example.com"
+                          className="w-full px-4 py-2.5 rounded-xl bg-navy-900 border border-white/10 text-white placeholder-slate-500 text-sm focus:border-electric-blue"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs font-mono text-slate-300 block mb-1">Message</label>
+                        <textarea
+                          required
+                          rows="4"
+                          value={formData.message}
+                          onChange={(e) => setFormData({...formData, message: e.target.value})}
+                          placeholder="Your message, project idea, or inquiry..."
+                          className="w-full px-4 py-2.5 rounded-xl bg-navy-900 border border-white/10 text-white placeholder-slate-500 text-sm focus:border-electric-blue resize-none"
+                        ></textarea>
+                      </div>
+                      <button
+                        type="submit"
+                        className="w-full py-3 rounded-xl bg-gradient-to-r from-electric-blue to-accent-purple text-navy-950 font-bold text-sm shadow-md"
+                      >
+                        Submit Demo Note
+                      </button>
+                    </form>
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="bg-navy-950 border-t border-white/10 py-10 text-slate-400">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono">
+              <div>
+                © {new Date().getFullYear()} Kavya Jain. All rights reserved.
+              </div>
+              <div className="text-slate-300">
+                Designed and built by <span className="text-electric-blue font-semibold">Kavya Jain.</span>
+              </div>
+              <button 
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300"
+                aria-label="Back to top"
+              >
+                <Icons.ArrowUp />
+              </button>
+            </div>
+          </footer>
+
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
